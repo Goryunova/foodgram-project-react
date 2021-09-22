@@ -8,7 +8,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     restart: always
     env_file: 
-      - ...backend/.env
+      - ../backend/.env
 
   frontend:
     build:
@@ -18,16 +18,17 @@ services:
       - ../frontend/:/app/result_build/
     depends_on:
       - db
-    backend:
-      image: : dockerfirst1/foodgram
-      restart: always
-      volumes: 
-        - static_value:/code/dj_static/
-        - media_value:/code/dj_media/
-      depends_on:
-        - db
-      env_file:
-        - ../backend/.env
+
+  backend:
+    image: marygor/foodgram-project-react:latest
+    restart: always
+    volumes: 
+      - static_value:/code/static/
+      - media_value:/code/media/
+    depends_on:
+      - db
+    env_file:
+      - ../backend/.env
   
   nginx:
     image: nginx:1.19.3
