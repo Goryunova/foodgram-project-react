@@ -134,11 +134,11 @@ server_address - IP-адрес сервера или доменное имя.
 В списке контейнеров копировать CONTAINER ID контейнера username/foodgram-project-react:latest (username - имя пользователя на DockerHub):
 
   ```
-  CONTAINER ID   IMAGE                                COMMAND                  CREATED         STATUS                       PORTS     NAMES
-8021345d9138   nginx:1.19.3                         "/docker-entrypoint.…"   7 minutes ago   Exited (0) 2 minutes ago               marygor_nginx_1
-d3eb395676c6   marygor/foodgram-project-react:latest   "/entrypoint.sh /bin…"   7 minutes ago   Exited (137) 2 minutes ago             marygor_backend_1
-2a0bf05071ba   postgres:12.4                        "docker-entrypoint.s…"   8 minutes ago   Exited (137) 2 minutes ago             marygor_db_1
-7caa47e8ad7e   marygor/foodgram_frontend:latest    "docker-entrypoint.s…"   8 minutes ago   Exited (0) 7 minutes ago               marygor_frontend_1
+  CONTAINER ID   IMAGE                                   COMMAND                  CREATED          STATUS                         PORTS                               NAMES
+9901e9fd3f80   nginx:1.19.3                            "/docker-entrypoint.…"   29 seconds ago   Up 26 seconds                  0.0.0.0:80->80/tcp, :::80->80/tcp   praktikum-maria_nginx_1
+49ce10d94a33   marygor/foodgram-project-react:latest   "/entrypoint.sh /bin…"   31 seconds ago   Up 28 seconds                                                      praktikum-maria_backend_1
+d433369058fd   postgres:13.2                           "docker-entrypoint.s…"   19 hours ago     Restarting (1) 7 seconds ago                                       praktikum-maria_db_1
+5f4570b7f7ee   marygor/yamdb_final:latest              "/bin/sh -c 'gunicor…"   12 days ago      Up 12 days                                                         praktikum-maria_web_1
   ```
 
 Выполнить вход в контейнер:
