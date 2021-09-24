@@ -138,7 +138,7 @@ server_address - IP-адрес сервера или доменное имя.
 8021345d9138   nginx:1.19.3                         "/docker-entrypoint.…"   7 minutes ago   Exited (0) 2 minutes ago               marygor_nginx_1
 d3eb395676c6   marygor/foodgram-project-react:latest   "/entrypoint.sh /bin…"   7 minutes ago   Exited (137) 2 minutes ago             marygor_backend_1
 2a0bf05071ba   postgres:12.4                        "docker-entrypoint.s…"   8 minutes ago   Exited (137) 2 minutes ago             marygor_db_1
-7caa47e8ad7e   marygor/foodgram_frontend:v1.0    "docker-entrypoint.s…"   8 minutes ago   Exited (0) 7 minutes ago               marygor_frontend_1
+7caa47e8ad7e   marygor/foodgram_frontend:latest    "docker-entrypoint.s…"   8 minutes ago   Exited (0) 7 minutes ago               marygor_frontend_1
   ```
 
 Выполнить вход в контейнер:
