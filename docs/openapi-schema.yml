@@ -644,7 +644,11 @@ paths:
             schema:
               $ref: '#/components/schemas/SetPassword'
       responses:
-        '204':
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPassword'
           description: 'Пароль успешно изменен'
         '400':
           $ref: '#/components/responses/ValidationError'
@@ -667,7 +671,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenGetResponse'
+                $ref: '#/components/schemas/TokenCreate'
           description: ''
       tags:
       - Пользователи
@@ -779,7 +783,7 @@ components:
         color:
           type: string
           nullable: true
-          maxLength: 7
+          maxLength: 200
           description: 'Цвет в HEX'
           example: '#E26C2D'
         slug:
@@ -1039,11 +1043,6 @@ components:
         password:
           type: string
         email:
-          type: string
-    TokenGetResponse:
-      type: object
-      properties:
-        auth_token:
           type: string
     RecipeCreateUpdate:
       type: object

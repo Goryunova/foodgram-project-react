@@ -1,56 +1,49 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, status
-from rest_framework.generics import RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated
+from djoser.views import UserViewSet
+from rest_framework import permissions, status
+from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .models import Follow
-from .serializers import (FollowSerializer, ShowFollowSerializer,
-                          UserSerializer)
+from .serializers import FollowSerializer, ShowFollowsSerializer
 
-User = get_user_model
-
-
-class UserView(RetrieveAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, ]
-
-    def get_object(self):
-        return self.request.user
+User = get_user_model()
 
 
-class FollowAPIView(APIView):
-    permission_classes = [IsAuthenticated, ]
+class CustomUserViewSet(UserViewSet):
 
-    def get(self, request, author_id):
-        user = request.user
-        data = {'user': user.id, 'author': author_id}
-        serializer = FollowSerializer(data=data, context={'request': request})
-        if not serializer.is_valid():
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    @action(detail=True,
+            methods=["GET", "DELETE"],
+            url_path='subscribe',
+            url_name='subscribe',
+            permission_classes=[permissions.IsAuthenticated])
+    def subscribe(self, request, id):
+        author = get_object_or_404(User, id=id)
+        serializer = FollowSerializer(
+            data={'user': request.user.id, 'author': id}
+        )
+        if request.method == "GET":
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=request.user)
+            serializer = ShowFollowsSerializer(author)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        follow = get_object_or_404(Follow, user=request.user, author__id=id)
+        follow.delete()
+        return Response(f'{request.user} отписался от {follow.author}',
+                        status=status.HTTP_204_NO_CONTENT)
 
-    def delete(self, request, author_id):
-        user = request.user
-        author = get_object_or_404(User, id=author_id)
-        obj = get_object_or_404(Follow, user=user, author=author)
-        obj.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class ListFollowView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated, ]
-    serializer_class = ShowFollowSerializer
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context.update({'request': self.request})
-        return context
-
-    def get_queryset(self):
-        user = self.request.user
-        return User.objects.filter(following__user=user)
+    @action(detail=False,
+            methods=["GET"],
+            url_path='subscriptions',
+            url_name='subscriptions',
+            permission_classes=[permissions.IsAuthenticated])
+    def show_follows(self, request):
+        user_obj = User.objects.filter(following__user=request.user)
+        paginator = PageNumberPagination()
+        paginator.page_size = 6
+        result_page = paginator.paginate_queryset(user_obj, request)
+        serializer = ShowFollowsSerializer(
+            result_page, many=True, context={'current_user': request.user})
+        return paginator.get_paginated_response(serializer.data)

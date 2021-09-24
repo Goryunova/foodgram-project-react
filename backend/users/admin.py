@@ -1,18 +1,20 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 
-from .models import CustomUser, Follow
+from .models import Follow
+
+User = get_user_model()
 
 
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'first_name', 'last_name', 'email',
-                    'password')
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'email', 'username', 'first_name', 'last_name')
     list_filter = ('email', 'username')
 
 
 class FollowAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'author',)
-    empty_value_display = '-пусто-'
+    list_display = ('author', 'user', 'created_at')
+    list_filter = ('created_at',)
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(User, UserAdmin)
 admin.site.register(Follow, FollowAdmin)
