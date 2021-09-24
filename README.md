@@ -19,14 +19,14 @@
 # Как запустить
 Клонируем проект: 
 ```
-git clone https://github.com/FadeevDV/foodgram-project-react.git
+git clone https://github.com/Goryunova/foodgram-project-react.git
 ```
 Для добавления файла .env с настройками базы данных на сервер необходимо:
 
 Установить соединение с сервером по протоколу ssh:
 
   ```
-  ssh username@178.154.241.240
+  ssh username@178.154.246.165
   ```
 
 Где username - имя пользователя, под которым будет выполнено подключение к серверу.
@@ -36,7 +36,7 @@ server_address - IP-адрес сервера или доменное имя.
 Например:
 
   ```
-  ssh praktikum-maria@178.154.241.240
+  ssh praktikum-maria@178.154.246.165
   ```
 
 В домашней директории проекта Создать папку app/:
@@ -135,10 +135,10 @@ server_address - IP-адрес сервера или доменное имя.
 
   ```
   CONTAINER ID   IMAGE                                COMMAND                  CREATED         STATUS                       PORTS     NAMES
-8021345d9138   nginx:1.19.3                         "/docker-entrypoint.…"   7 minutes ago   Exited (0) 2 minutes ago               dfadeev-zld_nginx_1
-d3eb395676c6   dfadeevzld/foodgram_backend:latest   "/entrypoint.sh /bin…"   7 minutes ago   Exited (137) 2 minutes ago             dfadeev-zld_backend_1
-2a0bf05071ba   postgres:12.4                        "docker-entrypoint.s…"   8 minutes ago   Exited (137) 2 minutes ago             dfadeev-zld_db_1
-7caa47e8ad7e   dfadeevzld/foodgram_frontend:v1.0    "docker-entrypoint.s…"   8 minutes ago   Exited (0) 7 minutes ago               dfadeev-zld_frontend_1
+8021345d9138   nginx:1.19.3                         "/docker-entrypoint.…"   7 minutes ago   Exited (0) 2 minutes ago               marygor_nginx_1
+d3eb395676c6   marygor/foodgram-project-react:latest   "/entrypoint.sh /bin…"   7 minutes ago   Exited (137) 2 minutes ago             marygor_backend_1
+2a0bf05071ba   postgres:12.4                        "docker-entrypoint.s…"   8 minutes ago   Exited (137) 2 minutes ago             marygor_db_1
+7caa47e8ad7e   marygor/foodgram_frontend:v1.0    "docker-entrypoint.s…"   8 minutes ago   Exited (0) 7 minutes ago               marygor_frontend_1
   ```
 
 Выполнить вход в контейнер:
