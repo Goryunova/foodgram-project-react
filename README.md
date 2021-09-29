@@ -188,4 +188,4 @@ d433369058fd   postgres:13.2                           "docker-entrypoint.s…" 
 
 * [Мария Горюнова](https://github.com/Goryunova)
 
-[Проект доступен по адресу](http://178.154.211.129) (почта: review@review.xxx, логин: review_master, пароль: praktikum2021)
+[Проект будет доступен по адресу](http://178.154.211.129) (почта: review@review.xxx, логин: review_master, пароль: praktikum2021)

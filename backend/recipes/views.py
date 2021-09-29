@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
@@ -28,28 +29,11 @@ class TagsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class RecipesViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all().order_by('-id')
     filter_class = RecipeFilter
     pagination_class = PageNumberPagination
     permission_classes = [AdminOrAuthorOrReadOnly, ]
-
-    def get_queryset(self):
-        queryset = Recipe.objects.all()
-        is_in_shopping_cart = self.request.query_params.get(
-            "is_in_shopping_cart"
-        )
-        is_favorited = self.request.query_params.get("is_favorited")
-        cart = Purchase.objects.filter(user=self.request.user.id)
-        favorite = Favorite.objects.filter(user=self.request.user.id)
-
-        if is_in_shopping_cart == "true":
-            queryset = queryset.filter(purchase__in=cart)
-        elif is_in_shopping_cart == "false":
-            queryset = queryset.exclude(purchase__in=cart)
-        if is_favorited == "true":
-            queryset = queryset.filter(favorites__in=favorite)
-        elif is_favorited == "false":
-            queryset = queryset.exclude(favorites__in=favorite)
-        return queryset.all()
+    filter_backends = [DjangoFilterBackend]
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
@@ -92,8 +76,8 @@ class IngredientViewSet(viewsets.ModelViewSet):
 @permission_classes([IsAuthenticated])
 def download_shopping_cart(request):
     user = request.user
-    ingredients = IngredientForRecipe.objects.filter(
-        recipe__in_cart__user=user)
+    ingredients = list(IngredientForRecipe.objects.filter(
+        recipe__in_cart__user=user).values_list('ingredient', flat=True))
     buying_list = {}
     for item in ingredients:
         name = item.ingredient.name
