@@ -61,6 +61,7 @@ jobs:
           stack_file_name: docker-compose.yaml
           script: |
             sudo docker pull jecustoms/foodgram-project-react:latest
+            sudo docker pull marygor/foodgram_frontend:latest
             sudo docker-compose stop
             sudo docker-compose rm backend
             sudo docker-compose up -d
