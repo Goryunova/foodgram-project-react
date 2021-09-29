@@ -26,7 +26,7 @@ git clone https://github.com/Goryunova/foodgram-project-react.git
 Установить соединение с сервером по протоколу ssh:
 
   ```
-  ssh username@178.154.246.165
+  ssh username@178.154.241.240
   ```
 
 Где username - имя пользователя, под которым будет выполнено подключение к серверу.
@@ -36,7 +36,7 @@ server_address - IP-адрес сервера или доменное имя.
 Например:
 
   ```
-  ssh praktikum-maria@178.154.246.165
+  ssh praktikum-maria@178.154.241.140
   ```
 
 В домашней директории проекта Создать папку app/:
