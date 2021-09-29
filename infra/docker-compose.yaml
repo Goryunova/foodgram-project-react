@@ -14,17 +14,18 @@ services:
       - ./backend/.env
 
   frontend:
-  build:
-    context: ./frontend
-    dockerfile: Dockerfile
-  volumes:
-    - ./frontend/:/app/result_build/
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend/:/app/result_build/
+
   backend:
-    image: marygor/foodgram-project-react:latest
+    image: jecustoms/foodgram-project-react
     restart: always
     volumes:
-      - static_value:/code/backend_static/
-      - media_value:/code/backend_media/
+      - static_value:/code/backend-static/
+      - media_value:/code/backend-media/
     depends_on:
       - db
     env_file:
