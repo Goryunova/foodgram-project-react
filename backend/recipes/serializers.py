@@ -3,6 +3,7 @@ from django.db.models import F
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
 
 from users.serializers import CustomUserSerializer
 from .models import (Favorite, Ingredient, IngredientForRecipe, Purchase,
@@ -24,17 +25,11 @@ class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
         fields = ['user', 'recipe']
-
-    def validate(self, data):
-        user = data['user']['id']
-        recipe = data['recipe']['id']
-        if Favorite.objects.filter(user=user, recipe__id=recipe).exists():
-            raise serializers.ValidationError(
-                {
-                    "errors": "Нельзя добавить повторно в избранное"
-                }
-            )
-        return data
+        validators = [UniqueTogetherValidator(
+            queryset=Favorite.objects.all(),
+            fields=['user', 'recipe'],
+            massage=('Вы уже добавли рецепт в избранное!')
+        )]
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
@@ -44,17 +39,11 @@ class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
         fields = '__all__'
-
-    def validate(self, data):
-        user = data['user']['id']
-        recipe = data['recipe']['id']
-        if Purchase.objects.filter(user=user, recipe__id=recipe).exists():
-            raise serializers.ValidationError(
-                {
-                    "errors": "Вы уже добавили рецепт в корзину"
-                }
-            )
-        return data
+        validators = [UniqueTogetherValidator(
+            queryset=Purchase.objects.all(),
+            fields=['user', 'recipe'],
+            message=('Вы уже добавили рецепт в список покупок!')
+        )]
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -69,8 +58,8 @@ class IngredientSerializer(serializers.ModelSerializer):
 class IngredientForRecipeSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source='ingredient.name', read_only=True)
     measurement_unit = serializers.ReadOnlyField(
-        source='ingredient.measurement_unit', read_only=True
-    )
+        source='ingredient.measurement_unit', read_only=True)
+    ingredient = [UniqueValidator(queryset=IngredientForRecipe.objects.all())]
 
     class Meta:
         model = IngredientForRecipe
@@ -109,15 +98,11 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, data):
         ingredients = self.initial_data.get('ingredients')
-        ingredients_set = set()
         if not ingredients:
             raise ValidationError('Нужно выбрать хотя бы один ингредиент!')
         for ingredient in ingredients:
             if int(ingredient['amount']) <= 0:
                 raise ValidationError('Количество должно быть положительными!')
-            if ingredient['id'] in ingredients_set:
-                raise ValidationError(
-                    'Ингредиент в рецепте не должен повторяться!')
         return data
 
     def add_recipe_ingredients(self, ingredients, recipe):
