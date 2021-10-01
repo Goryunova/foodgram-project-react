@@ -26,7 +26,7 @@ git clone https://github.com/Goryunova/foodgram-project-react.git
 Установить соединение с сервером по протоколу ssh:
 
   ```
-  ssh username@178.154.241.240
+  ssh username@server_address
   ```
 
 Где username - имя пользователя, под которым будет выполнено подключение к серверу.
@@ -36,7 +36,7 @@ server_address - IP-адрес сервера или доменное имя.
 Например:
 
   ```
-  ssh praktikum-maria@178.154.241.140
+  ssh praktikum@178.154.241.140
   ```
 
 В домашней директории проекта Создать папку app/:
@@ -135,10 +135,9 @@ server_address - IP-адрес сервера или доменное имя.
 
   ```
   CONTAINER ID   IMAGE                                   COMMAND                  CREATED          STATUS                         PORTS                               NAMES
-9901e9fd3f80   nginx:1.19.3                            "/docker-entrypoint.…"   29 seconds ago   Up 26 seconds                  0.0.0.0:80->80/tcp, :::80->80/tcp   praktikum-maria_nginx_1
-49ce10d94a33   marygor/foodgram-project-react:latest   "/entrypoint.sh /bin…"   31 seconds ago   Up 28 seconds                                                      praktikum-maria_backend_1
-d433369058fd   postgres:13.2                           "docker-entrypoint.s…"   19 hours ago     Restarting (1) 7 seconds ago                                       praktikum-maria_db_1
-5f4570b7f7ee   marygor/yamdb_final:latest              "/bin/sh -c 'gunicor…"   12 days ago      Up 12 days                                                         praktikum-maria_web_1
+9901e9fd3f80   nginx:1.19.3                            "/docker-entrypoint.…"   29 seconds ago   Up 26 seconds
+49ce10d94a33   marygor/foodgram-project-react:latest   "/entrypoint.sh /bin…"   31 seconds ago   Up 28 seconds
+d433369058fd   postgres:13.2                           "docker-entrypoint.s…"   19 hours ago     Restarting (1) 7 seconds ago
   ```
 
 Выполнить вход в контейнер:

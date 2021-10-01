@@ -96,7 +96,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, data):
         ingredients = self.initial_data.get('ingredients')
-        ingredients_set = set(ingredients)
+        ingredients_set = set()
         if not ingredients:
             raise ValidationError('Нужно выбрать хотя бы один ингредиент!')
         for ingredient in ingredients:
@@ -104,6 +104,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 raise ValidationError('Количество должно быть положительными!')
             if ingredient in ingredients_set:
                 raise ValidationError('Вы уже добавили этот ингредиент!')
+            ingredients_set.add(ingredient)
         return data
 
     def add_recipe_ingredients(self, ingredients, recipe):
