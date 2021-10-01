@@ -21,8 +21,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'import_export',
     'djoser',
-    'colorfield',
-
     'users',
     'recipes',
 ]

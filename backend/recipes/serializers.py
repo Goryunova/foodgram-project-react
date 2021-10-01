@@ -3,7 +3,7 @@ from django.db.models import F
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
+from rest_framework.validators import UniqueTogetherValidator
 
 from users.serializers import CustomUserSerializer
 from .models import (Favorite, Ingredient, IngredientForRecipe, Purchase,
@@ -28,7 +28,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
         validators = [UniqueTogetherValidator(
             queryset=Favorite.objects.all(),
             fields=['user', 'recipe'],
-            massage=('Вы уже добавли рецепт в избранное!')
+            message=('Вы уже добавли рецепт в избранное!')
         )]
 
 
@@ -59,7 +59,6 @@ class IngredientForRecipeSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source='ingredient.name', read_only=True)
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit', read_only=True)
-    ingredient = [UniqueValidator(queryset=IngredientForRecipe.objects.all())]
 
     class Meta:
         model = IngredientForRecipe
@@ -69,7 +68,6 @@ class IngredientForRecipeSerializer(serializers.ModelSerializer):
 class IngredientForRecipeCreate(IngredientForRecipeSerializer):
     id = serializers.IntegerField(write_only=True)
     amount = serializers.IntegerField(write_only=True)
-    ingredients = IngredientForRecipe(many=True)
 
     def validate_amount(self, amount):
         if amount < 1:
@@ -98,11 +96,14 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, data):
         ingredients = self.initial_data.get('ingredients')
+        ingredients_set = set(ingredients)
         if not ingredients:
             raise ValidationError('Нужно выбрать хотя бы один ингредиент!')
         for ingredient in ingredients:
             if int(ingredient['amount']) <= 0:
                 raise ValidationError('Количество должно быть положительными!')
+            if ingredient in ingredients_set:
+                raise ValidationError('Вы уже добавили этот ингредиент!')
         return data
 
     def add_recipe_ingredients(self, ingredients, recipe):
