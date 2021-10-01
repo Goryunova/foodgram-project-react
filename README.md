@@ -161,7 +161,7 @@ d433369058fd   postgres:13.2                           "docker-entrypoint.s…" 
   >>> from django.contrib.contenttypes.models import ContentType
   >>> ContentType.objects.all().delete()
   >>> quit()
-  python manage.py loaddata dump.json
+  python manage.py loaddata ingredients.json
   ```
 Теперь проекту доступна статика. В админке Django (http://<server_address>/admin) доступно управление данными. Если загрузить фикструры, то будет доступен superuser:
 
@@ -188,4 +188,4 @@ d433369058fd   postgres:13.2                           "docker-entrypoint.s…" 
 
 * [Мария Горюнова](https://github.com/Goryunova)
 
-[Проект будет доступен по адресу](http://178.154.211.129) (почта: review@review.xxx, логин: review_master, пароль: praktikum2021)
+[Проект будет доступен по адресу](http://84.201.163.135) (почта: nikita@reviewer.ru, пароль: test0101)
