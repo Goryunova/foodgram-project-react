@@ -1,6 +1,12 @@
 name: Foodgram_project
 
-on: [push]
+on:
+  push:
+    branches:
+      - "**"
+    paths-ignore:
+      - '**/README.md'
+      - '**/docker-compose.yml'
 
 jobs:
   tests:
