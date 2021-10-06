@@ -50,7 +50,13 @@ jobs:
           push: true
           context: ./backend
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-project-react:latest
-          file: ./backend/Dockerfile        
+          file: ./backend/Dockerfile    
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./frontend
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:latest
    
   deploy:
     runs-on: ubuntu-latest
@@ -67,6 +73,7 @@ jobs:
           stack_file_name: docker-compose.yaml
           script: |
             sudo docker pull marygor/foodgram-project-react:latest
+            sudo docker pull marugor/foodgram_frontend:latest
             sudo docker-compose stop
             sudo docker-compose rm backend
             sudo docker-compose up -d

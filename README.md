@@ -1,3 +1,5 @@
+[![Foodgram_project](https://github.com/Goryunova/foodgram-project-react/actions/workflows/foodgram_project.yml/badge.svg)](https://github.com/Goryunova/foodgram-project-react/actions/workflows/foodgram_project.yml)
+
 # foodgram-project-react
 
 ## Описание
