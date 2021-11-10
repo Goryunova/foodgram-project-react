@@ -26,7 +26,7 @@ server_address - IP-адрес сервера или доменное имя.
 Например:
 
   ```
-  ssh praktikum@178.154.241.140
+  ssh praktikum@178.154.246.165
   ```
 
 В домашней директории проекта Создать папку app/:
@@ -93,28 +93,21 @@ server_address - IP-адрес сервера или доменное имя.
   * tests - тестирование проекта на соответствие PEP8 и тестам pytest.
 
   * build_and_push_to_docker_hub - при успешном прохождении тестов собирается образ (image) для docker контейнера и отправлятеся в DockerHub
-
-  * deploy - после отправки образа на DockerHub начинается деплой проекта на сервере. Происходит копирование следующих файлов с репозитория на сервер:
   
-    ```
-    1 docker-compose.yaml, необходимый для сборки трех контейнеров:
-      1.1 postgres - контейнер базы данных
-      1.2 web - контейнер Django приложения + wsgi-сервер gunicorn
-      1.3 nginx - веб-сервер
-    2 nginx/default.conf - файл кофигурации nginx сервера
-    3 static - папка со статическими файлами проекта
-    ```
-
-После копировния происходит установка docker и docker-compose на сервере и начинается сборка и запуск контейнеров.
-
-* send_message - после сборки и запуска контейнеров происходит отправка сообщения в телеграм об успешном окончании workflow
+  * send_message - после сборки и запуска контейнеров происходит отправка сообщения в телеграм об успешном окончании workflow
 
 После выполнения вышеуказанных процедур необходимо установить соединение с сервером:
 
   ```
   ssh username@server_address
   ```
+Стянуть образы с dockerhub и запустить контейнеры
 
+```
+sudo docker pull marygor/foodgram-project-react:latest
+sudo docker pull marygor/foodgram_frontend:latest
+sudo docker-compose up -d
+```
 Отобразить список работающих контейнеров:
 
   ```
@@ -133,7 +126,7 @@ d433369058fd   postgres:13.2                           "docker-entrypoint.s…" 
 Выполнить вход в контейнер:
 
   ```
-  sudo docker exec -it d3eb395676c6 bash
+  sudo docker exec -it 49ce10d94a33 bash
   ```
 
 Внутри контейнера выполнить миграции:
@@ -142,39 +135,19 @@ d433369058fd   postgres:13.2                           "docker-entrypoint.s…" 
   python manage.py migrate
   ```
 
-
-Также можно наполнить базу данных начальными тестовыми данными:
-
+Создать администратора:
   ```
-  python3 manage.py shell
-  >>> from django.contrib.contenttypes.models import ContentType
-  >>> ContentType.objects.all().delete()
-  >>> quit()
-  python manage.py loaddata ingredients.json
+  python manage.py createsuperuser
   ```
-Теперь проекту доступна статика. В админке Django (http://<server_address>/admin) доступно управление данными. Если загрузить фикструры, то будет доступен superuser:
-
-```
-  user: Admin
-  password: admin
-  email: admin@admin.com
-```
-
-Для создания нового суперпользователя можно выполнить команду:
-
+Собрать статику:
   ```
-  $ python manage.py createsuperuser
+  python manage.py collectstatic
   ```
-  
-Для остановки и удаления контейнеров и образов на сервере:
-
-  ```
-  sudo docker stop $(sudo docker ps -a -q) && sudo docker rm $(sudo docker ps -a -q) && sudo docker rmi $(sudo docker images -q)
-  ```
+Далее зайти на сайт под администратором и заполнить таблицы Ингредиенты и Теги 
 
 # Автор:
 
 
 * [Мария Горюнова](https://github.com/Goryunova)
 
-[Проект будет доступен по адресу](http://84.201.163.135) (почта: nikita@reviewer.ru, пароль: test0101)
+[Проект доступен по адресу](http://178.154.246.165) (почта: admin@mail.ru, пароль: qwe1937)
